@@ -1,6 +1,6 @@
 const myLibrary = [
-  {title: 'Harry Potter', author: ' J. K. Rowling', pages: '500', read: 'Read', id: '361ed99d-9f5b-41bb-8614-6ad1a1e0791f'},
-  {title: 'The Hobbit', author: 'J. R. R. Tolkien', pages: '500', read: 'Not read', id: '6d2db1f0-6dfb-455c-8300-df0ac8980ded'}
+  new Book('Harry Potter', 'J. K. Rowling', '500', 'Read'),
+  new Book('The Hobbit', 'J. R. R. Tolkien', '500', 'Not read')
 ];
 
 const library = document.querySelector(".library");
