@@ -1,8 +1,3 @@
-const myLibrary = [
-  new Book('Harry Potter', 'J. K. Rowling', '500', 'Read'),
-  new Book('The Hobbit', 'J. R. R. Tolkien', '500', 'Not read')
-];
-
 const library = document.querySelector(".library");
 const btnAdd = document.querySelector(".addBtn");
 const modal = document.querySelector(".modal");
@@ -12,33 +7,37 @@ const authorInput = document.querySelector("#author-input");
 const pagesInput = document.querySelector("#pages-input");
 const statusInput = document.querySelector("#status-input");
 
-function Book(title, author, pages, read) {
+class Book {
+  constructor (title, author, pages, read) {
+    this.title = title;
+    this.author = author;
+    this.pages = Number(pages);
+    this.read = read;
+    this.id = crypto.randomUUID();
 
-  // the constructor...
-
-  if (!new.target) {
-    throw Error("You must use the 'new' operator to call the constructor")
+    let pagesNumb = Number(pages);
+    if (isNaN(pagesNumb) || pagesNumb <= 0) {
+      throw new Error("Pages must be a positive number.") 
+    }
   }
+
+  toggleReadStatus() {
+    this.read = this.read === "Read" ? "Not read" : "Read";
+  }
+
+  static addBookToLibrary(title, author, pages, read) {
+    // take params, create a book then store it in the array
+    let newBook = new Book(title, author, pages, read)
+    myLibrary.push(newBook);
+    displayLibrary(myLibrary);
   
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-  this.id = crypto.randomUUID();
+  }
 }
 
-Book.prototype.toggleReadStatus = function () {
-  this.read = this.read === "Read" ? "Not read" : "Read"
-}
-
-function addBookToLibrary(title, author, pages, read) {
-  // take params, create a book then store it in the array
-
-  let newBook = new Book(title, author, pages, read)
-  myLibrary.push(newBook);
-  displayLibrary(myLibrary);
-
-}
+const myLibrary = [
+  new Book('Harry Potter', 'J. K. Rowling', '500', 'Read'),
+  new Book('The Hobbit', 'J. R. R. Tolkien', '500', 'Not read')
+];
 
 function displayLibrary (arr) {
     library.innerHTML = ``
@@ -82,18 +81,17 @@ function displayLibrary (arr) {
 
 // handle event delete item and change status
 library.addEventListener('click', function (e) {
-
+  // Handle delete btn
   if (e.target.classList.contains('deleteBtn')) {
     let idDelete = e.target.dataset.bookId;
-    for (let i = 0; i < myLibrary.length; i++) {
-      if (myLibrary[i].id == idDelete) {
-        myLibrary.splice(i,1);
-        displayLibrary(myLibrary);
-        break;
-      }
+
+    const index = myLibrary.findIndex(book => book.id === idDelete);
+    if (index !== -1) {
+      myLibrary.splice(index,1);
+      displayLibrary(myLibrary);
     }
   }
-
+  // Handle change status btn
   if (e.target.classList.contains('changeStatus')) {
     let idChange = e.target.dataset.bookId;
     for (let i = 0; i < myLibrary.length; i++) {
@@ -108,11 +106,7 @@ library.addEventListener('click', function (e) {
 
 // show form to add new book
 btnAdd.addEventListener('click', function () {
-  if(modal.classList.contains('hide')) {
-    modal.classList.remove('hide');
-  } else {
-    modal.classList.add('hide');
-  }
+  modal.classList.toggle("hide")
 })
 
 // submit form add new book
@@ -120,12 +114,19 @@ formInput.onsubmit = function (e) {
   e.preventDefault();
   let title = titleInput.value;
   let author = authorInput.value;
-  let pages = pagesInput.value;
+  let pages = Number(pagesInput.value);
   let read = statusInput.value;
+  if (isNaN(pages) || pages <= 0) {
+    alert("Pages must be a positive number.") 
+  }
 
   modal.classList.add('hide');
-  addBookToLibrary(title, author, pages, read);
+  Book.addBookToLibrary(title, author, pages, read);
   displayLibrary(myLibrary);
-
+  
+  titleInput.value = '';
+  authorInput.value = '';
+  pagesInput.value = '';
+  statusInput.value = 'Read';
 }
 displayLibrary(myLibrary);
