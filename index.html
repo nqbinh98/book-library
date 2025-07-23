@@ -12,29 +12,9 @@
     <title>Sign-up Form</title>
 </head>
 <body>
-
     <div class="container">
         <button class="addBtn">New</button>
-
         <div class="library">
-            <!-- <div class="item">
-                <div class="title">Title: 
-                    <span>Doreamon</span>
-                </div>
-
-                <div class="author">
-                    Author: <span>Saga</span>
-                </div>
-                <div class="pages">
-                    Pages: <span>300</span>
-                </div>
-                <div class="status">
-                    Status: <span>Not read</span>
-                    <button class="changeStatus">Change</button>
-                </div>
-                <button class="deleteBtn">Delete</button>
-            </div> -->
-            
         </div>
     </div>
 
@@ -45,7 +25,7 @@
             <label for="author">Author</label>
             <input required type="text" id="author-input">
             <label for="pages">Pages</label>
-            <input required type="number" id="pages-input">
+            <input required type="number" min="1" id="pages-input">
             <label for="status">Status</label>
             <select required id="status-input">
                 <option value="Read">Read</option>
